@@ -68,6 +68,7 @@ class CartController extends Controller
            CartItem::destroy($item->id);
            $productID = $item['product_id'];
            $product = Product::where('id',$productID)->first();
+           if($product->stock >0) {
            $newStock = $product->stock;
            $newStock -=1;
            Product::where('id',$productID)->update(['stock'=>$newStock]);
@@ -76,7 +77,7 @@ class CartController extends Controller
            $purchase->user_id = Auth::user()->id;
            $purchase->product_id = $productID;
            $purchase->save();
-           
+           }
         }
         
         $products = Product::all();
